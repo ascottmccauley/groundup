@@ -6,25 +6,40 @@
  */
 ?>
 <?php
+// Set a cookie after the first visit
+if ( !function_exists( 'groundup_new_user_cookie' ) ) {
+	function groundup_new_user_cookie() {
+		if ( ! $_COOKIE[ 'new_user' ] ) {
+			setcookie( 'new_user', '0', time()+3600*24*100, '/', $domain, false );
+		}
+	}
+}
+add_action( 'init', 'groundup_new_user_cookie' );
+
+// Check to see if this is user's first visit
+if ( !function_exists( 'groundup_is_new_user' ) ) {
+	function groundup_is_new_user() {
+		if ( $_COOKIE[ 'new_user' ] == '0' ) {
+			return false;
+		} else {
+			return true;
+		}
+	}	
+}
 
 // For internet Exploder below 9.0 display a simple alert notifying them to update
 // check $cached to prevent displaying the message on every page
 // @filters: groundup_browser_warning - the html warning message for outdated browsers
-if ( !function_exists( 'groundup_get_browser_warning' ) ) {
-	function groundup_get_browser_warning( $echo = false ) {
-		global $cached;
-		
+if ( !function_exists( 'groundup_browser_warning' ) ) {
+	function groundup_browser_warning() {
 		// only show the warning message once
-		if ( $cached != true ) {
+		if ( groundup_is_new_user() ) {
 			$warning = '<!--[if lt IE 9]><div class="alert-error browser-warning">Your browser is out of date. <a href="http://browsehappy.com/">Please upgrade to a modern browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a>.</div><![endif]-->';
-			if ( $echo ) {
-				echo apply_filters( 'groundup_browser_warning', $warning );
-			} else {
-				return apply_filters( 'groundup_browser_warning', $warning );
-			}
+			echo apply_filters( 'groundup_browser_warning', $warning );
 		}
 	}
 }
+add_action( 'groundup_inside_body', 'groundup_browser_warning' );
 
 // Use basic logic to determine correct sidebar for the page
 // @filters: groundup_sidebars
