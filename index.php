@@ -15,13 +15,10 @@
 			if ( ( $pos = strpos( $page_title, ':' ) ) !== false ) {
 			   $page_title = substr($page_title, $pos + 1);
 			}
-			if ( !empty( apply_filter( 'page_title', $page_title ) ) ) { ?>
-				<header><h3 class="text-center"><?php echo $page_title; ?></h3></header>
-			<?php } 
 		}
-		if ( ! empty( $page_title ) ) { ?>
+		if ( ! empty( apply_filters( 'page_title', $page_title ) ) ) { ?>
 			<header class="page-header">
-				<h3><?php echo $page_title; ?></h3>
+				<h2><?php echo $page_title; ?></h2>
 			</header>
 		<?php } ?>
 		
