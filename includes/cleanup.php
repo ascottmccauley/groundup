@@ -367,9 +367,8 @@ if ( !function_exists( 'groundup_nav_menu_css_class' ) ) {
 		}
 		
 		// remove duplicates and empty values
-		$classes = array_unique( $classes );
-		// TODO: $classes = 
-		
+		$classes = array_filter( array_unique( $classes ) );
+
 		return $classes;
 	}
 } 

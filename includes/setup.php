@@ -137,23 +137,24 @@ add_image_size( 'small', '120', '120', false );
 if ( !function_exists( 'groundup_create_nav_menus' ) ) {
 	function groundup_create_nav_menus( $menus ) {
 		$menus = apply_filters( 'groundup_menus', $menus );
+		
 		foreach ( $menus as $menu ) {
 			$slug = strtolower( str_replace ( '_', ' ', $menu ) );
 			// create menu if it doesn't exist yet
 			if ( !wp_get_nav_menu_object( $slug ) ) {
-				$menu_ID = wp_create_nav_menu( ucwords( $menu ), array('slug' => $slug ) );
+				$menu_ID = wp_create_nav_menu( ucwords( __( $menu, 'groundup' ) ), array( 'slug' => $slug ) );
 				
 				// Add menu to it's correct location
-				$menu = wp_get_nav_menu_object( $slug );
+				$menu_obj = wp_get_nav_menu_object( $slug );
 				$locations = get_theme_mod( 'nav_menu_locations' );
-				$locations[$slug] = $menu->term_id;
+				$locations[$slug] = $menu_obj->term_id;
 				set_theme_mod( 'nav_menu_locations', $locations );
 			}
 		}
 	}
 }
 
-// Add default menus for each item in $menus array
+// Create default menu locations
 // See http://codex.wordpress.org/Function_Reference/register_nav_menus
 // @filters: groundup_menus - an array of all the menu locations to be created
 if ( !function_exists( 'groundup_register_nav_menus' ) ) {
@@ -163,7 +164,7 @@ if ( !function_exists( 'groundup_register_nav_menus' ) ) {
 			$slug = strtolower( str_replace ( '_', ' ', $menu ) );
 			// create location
 			register_nav_menus( array(
-				$slug => __( $menu, 'groundup' )
+				$slug => ucwords( __( $menu, 'groundup' ) ),
 			) );
 		}
 	}
