@@ -5,9 +5,7 @@
 ?>
 <?php if( comments_open() || have_comments() ) { ?>
 	<aside id="discussion">
-		<?php // Comment Form
-		comment_form();
-		
+		<?php // Comments
 		if ( have_comments() ) {
 			// Password Protected
 			if ( post_password_required() ) { ?>
@@ -47,5 +45,6 @@
 				<?php } ?>
 			</section>
 		<?php } ?>
+		<?php comment_form(); ?>
 	</aside>
 <?php } ?>
