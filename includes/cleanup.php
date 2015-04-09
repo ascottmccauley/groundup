@@ -306,21 +306,6 @@ if ( !function_exists( 'groundup_remove_recent_comments_style' ) ) {
 }
 add_action( 'widgets_init', 'groundup_remove_recent_comments_style' );
 
-// Use the custom searchform located at /templates/searchform.php
-if ( !function_exists( 'groundup_get_searchform' ) ) {
-	function groundup_get_searchform( $echo = false ) {
-		ob_start();
-		get_template_part( 'templates/searchform' );
-		
-		if ( $echo ) {
-			echo ob_get_clean();
-		} else {
-			return ob_get_clean();
-		}
-	}
-}
-add_filter( 'get_searchform', 'groundup_get_searchform' );
-
 // Add items to nav menus
 // Adds an "edit" link for admins
 if ( !function_exists( 'groundup_nav_menu_items' ) ) {
