@@ -16,8 +16,10 @@
 			<?php } ?>
 			<?php the_content(); ?>
 	</section>
-	<footer>
-		<?php get_template_part( 'templates/meta' ); ?>
-	</footer>
+	<?php if ( ! is_page() ) { ?>
+		<footer>
+			<?php get_template_part( 'templates/meta' ); ?>
+		</footer>
+	<?php } ?>
 </article>
 <?php comments_template(); ?>
