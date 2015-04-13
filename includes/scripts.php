@@ -118,7 +118,7 @@ if ( !function_exists( 'groundup_local_jquery_fallback' ) ) {
 	function groundup_local_jquery_fallback( $src, $handle = null ) {
 		static $add_jquery_fallback = false;
 	  if ( $add_jquery_fallback ) {
-	    echo '<script>window.jQuery || document.write(\'<script src="' . get_stylesheet_directory_uri() . '/assets/js/jquery.js" defer="defer"><\/script>\')</script>' . "\n";
+	    echo '<script>window.jQuery || document.write(\'<script src="' . get_stylesheet_directory_uri() . '/assets/js/jquery.js" ><\/script>\')</script>' . "\n";
 	    $add_jquery_fallback = false;
 	  }
 	  if ( $handle === 'jquery' ) {
@@ -131,7 +131,9 @@ if ( !function_exists( 'groundup_local_jquery_fallback' ) ) {
 // set all js scripts to defer loading until after render
 if ( !function_exists( 'groundup_defer_script' ) ) {
 	function groundup_defer_script( $tag, $handle ) {
-		$tag = str_replace(' src', ' defer="defer" src', $tag );
+		if ( $handle != 'jquery' ) {
+			$tag = str_replace(' src', ' defer="defer" src', $tag );
+		}
 		return $tag;
 	}
 }
