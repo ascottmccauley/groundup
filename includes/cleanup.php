@@ -192,6 +192,21 @@ add_filter( 'login_headertitle', 'groundup_login_title' );
 // Disable login errors
 add_filter( 'login_errors', create_function( '$a', 'return null;' ) );
 
+// Makes the logout function double check that you are logged in before issuing the logout command, preventing an ugly WP error
+if ( !function_exists( 'groundup_logout' ) ) {
+	function groundup_logout() {
+		if ( is_user_logged_in() ) {
+			// remove check_admin_referrer to get rid of unecessary nonce check
+			//check_admin_referer( 'log-out' );
+			wp_logout();
+		}
+		$redirect_to = ! empty( $_REQUEST['redirect_to'] ) ? $_REQUEST['redirect_to'] : home_url();
+		wp_safe_redirect( $redirect_to );
+		exit;
+	}
+}
+add_action( 'login_form_logout', 'groundup_logout' );
+
 // Redirect failed login attempts to the same page instead of /wp-login
 // Note: This only works for failed logins; empty logins use groundup_empty_login_redirect
 if ( !function_exists( 'groundup_failed_login_redirect' ) ) {
