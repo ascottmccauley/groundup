@@ -140,7 +140,6 @@ if ( !function_exists( 'groundup_title_format' ) ) {
 add_filter( 'protected_title_format', 'groundup_title_format' );
 add_filter( 'private_title_format', 'groundup_title_format' );
 
-
 // Remove shortcodes from the_excerpt, but keep the content of that shortcode
 if ( !function_exists( 'groundup_excerpt_shortcodes' ) ) {
 	function groundup_excerpt_shortcodes( $excerpt = '' ) {
@@ -200,12 +199,12 @@ if ( !function_exists( 'groundup_failed_login_redirect' ) ) {
 		if ( isset( $_SERVER['HTTP_REFERER'] ) ) {
 			$referrer = $_SERVER['HTTP_REFERER'];
 			// if there's a valid referrer, and it's not the default log-in screen
-			if ( !empty( $referrer ) && !strstr( $referrer,'wp-login' ) && !strstr($referrer,'wp-admin' ) ) {
+			if ( !empty( $referrer ) && ! strstr( $referrer,'wp-login' ) && ! strstr( $referrer, 'wp-admin' ) ) {
 				if ( !strstr( $referrer, '?login=failed' ) ) {
 					 // Append some information (login=failed) to the URL for the theme to use
-					wp_redirect( $referrer . '?login=failed' ); 
+					wp_safe_redirect( $referrer . '?login=failed' ); 
 				}else {
-					wp_redirect( $referrer );
+					wp_safe_redirect( $referrer );
 				}
 				exit;
 			}
@@ -223,11 +222,11 @@ if ( !function_exists( 'groundup_empty_login_redirect' ) ) {
 				$referrer = $_SERVER['HTTP_REFERER'];
 				// if there's a valid referrer, and it's not the default log-in screen and there is no username
 				if ( !empty( $referrer ) && strstr( $referrer, 'logout' ) ) {
-					wp_redirect( home_url() );
+					wp_safe_redirect( home_url() );
 					exit;
-				}elseif ( !empty( $referrer ) && !strstr( $referrer, 'wp-login' ) && !strstr( $referrer,'wp-admin' ) ) {
+				}elseif ( ! empty( $referrer ) && ! strstr( $referrer, 'wp-login' ) && ! strstr( $referrer, 'wp-admin' ) && ! strstr( $referrer, '?login=empty' ) ) {
 					// Append some information (login=failed) to the URL for the theme to use
-					wp_redirect( $referrer . '?login=empty' ); 
+					wp_safe_redirect( $referrer . '?login=empty' ); 
 					exit;
 				}
 			}
@@ -254,7 +253,7 @@ if ( !function_exists( 'groundup_search_url_rewrite' ) ) {
 		$query_string = str_replace( '%5D', ']', $query_string );
 		
 		if ( is_search() && !is_admin() && strpos($_SERVER['REQUEST_URI'], "/{$search_base}/") === false ) {
-			wp_redirect( home_url( "/{$search_base}/" . urlencode(get_query_var('s') ) ) . '?' . $query_string );
+			wp_safe_redirect( home_url( "/{$search_base}/" . urlencode(get_query_var('s') ) ) . '?' . $query_string );
 			exit();
 		}
 	}
