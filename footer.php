@@ -8,7 +8,7 @@
 // body is opened in header.php
 ?>
 <footer id="footer">
-	<?php if ( has_nav_menu( 'mobile' ) ) {
+	<?php if ( has_nav_menu( 'footer' ) ) {
 		wp_nav_menu( array( 'theme_location' => 'footer', 'container' => 'false' ) );
 	} else { ?>
 		<div class="copyrights">
