@@ -4,9 +4,12 @@
  */
 ?>
 <article <?php post_class(); ?>>
-	<header>
-		<h3 class="entry-title"><a href="<?php the_permalink(); ?>" rel="bookmark" title="Bookmark for <?php the_title_attribute(); ?>" class="bookmark"><?php the_title(); ?></a></h3>
-	</header>
+	<?php $page_title = apply_filters( 'page_title', $page_title );
+	if ( ! empty( $page_title ) ) { ?>
+		<header class="page-header">
+			<h2><?php echo $page_title; ?></h2>
+		</header>
+	<?php } ?>
 	<section class="entry-content">
 		<?php $thumbnail = get_the_post_thumbnail( $post->ID,'medium' );
 			if ( $thumbnail != '' ) { ?>

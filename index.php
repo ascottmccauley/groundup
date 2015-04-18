@@ -16,7 +16,8 @@
 			   $page_title = substr($page_title, $pos + 1);
 			}
 		}
-		if ( ! empty( apply_filters( 'page_title', $page_title ) ) ) { ?>
+		$page_title = apply_filters( 'page_title', $page_title );
+		if ( ! empty( $page_title ) ) { ?>
 			<header class="page-header">
 				<h2><?php echo $page_title; ?></h2>
 			</header>
