@@ -374,6 +374,7 @@ if ( !function_exists( 'groundup_nav_menu_css_class' ) ) {
 add_filter( 'nav_menu_css_class', 'groundup_nav_menu_css_class', 10, 2 );
 
 // Create a sitemap.xml every time a post is saved
+// TODO: Figure out why just having this function gives 500 error on server when trying to add a new post?
 if ( !function_exists( 'groundup_create_sitemap' ) ) {
 	function groundup_create_sitemap( $post_id ) {
 		// Don't create sitemap during autosaves
@@ -422,4 +423,4 @@ if ( !function_exists( 'groundup_create_sitemap' ) ) {
 		return $post_id;
 	}
 }
-add_action( 'save_post', 'groundup_create_sitemap' );
+//add_action( 'save_post', 'groundup_create_sitemap' );
