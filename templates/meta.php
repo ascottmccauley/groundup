@@ -6,7 +6,7 @@
  *	groundup_exif
  */
 ?>
-<time class="updated" datetime="<? echo get_the_time('c'); ?>"><? echo get_time_ago( get_the_time('U') ); ?></time>
+<time class="updated" datetime="<?php echo get_the_time('c'); ?>"><?php echo get_time_ago( get_the_time('U') ); ?></time>
 <?php // Comments
 $comment_count = get_comment_count( $post->ID );
 if ( comments_open() && $comment_count['approved'] > 0 ) {
