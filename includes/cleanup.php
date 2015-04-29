@@ -18,9 +18,11 @@ remove_action( 'wp_head', '_admin_bar_bump_cb' );
 if ( !function_exists( 'groundup_compression' ) ) {
 	function groundup_compression( $rewrites ) {
 		global $wp_rewrite;
-		$htaccess_file = get_home_path() . '.htaccess';
-		if ((!file_exists($htaccess_file) && is_writable(get_home_path()) && $wp_rewrite->using_mod_rewrite_permalinks()) || is_writable($htaccess_file)) {
-			if ( got_mod_rewrite() ) {
+		$mod_rewrite_enabled = function_exists('got_mod_rewrite') ? got_mod_rewrite() : false;
+		$home_path = function_exists('get_home_path') ? get_home_path() : ABSPATH;
+		$htaccess_file = $home_path . '.htaccess';
+		if ( ( !file_exists( $htaccess_file )  && is_writable( $home_path ) && $wp_rewrite->using_mod_rewrite_permalinks() ) || is_writable( $htaccess_file ) ) {
+			if ( $mod_rewrite_enabled ) {
 				$gzip = "<IfModule mod_headers.c>
 	# Make sure proxies don't deliver the wrong content
 	Header append Vary User-Agent env=!dont-vary
@@ -416,7 +418,8 @@ if ( !function_exists( 'groundup_create_sitemap' ) ) {
 			}
 			// write to file
 			global $wp_filesystem;
-			if ( ! $wp_filesystem->put_contents( trailingslashit( get_home_path() ) . 'sitemap.xml', $output, FS_CHMOD_FILE ) ) {
+			$home_path = function_exists('get_home_path') ? get_home_path() : ABSPATH;
+			if ( ! $wp_filesystem->put_contents( trailingslashit( $home_path ) . 'sitemap.xml', $output, FS_CHMOD_FILE ) ) {
 				add_action ('admin_notices', create_function( '', "echo '<div class=\"error\"><p>There is a problem saving the sitemap.xml file</p></div>';" ) );
 			}
 		}
