@@ -6,6 +6,16 @@
  */
 ?>
 <?php
+// a simple check to see if we are on the login page
+function is_login() {
+	return in_array( $GLOBALS['pagenow'], array( 'wp-login.php') );
+}
+
+// a simple check to see if we are on the registration page
+function is_register() {
+	return in_array( $GLOBALS['pagenow'], array( 'wp-register.php' ) );
+}
+
 // Set a cookie after the first visit
 if ( !function_exists( 'groundup_new_user_cookie' ) ) {
 	function groundup_new_user_cookie() {
