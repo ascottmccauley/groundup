@@ -57,21 +57,21 @@ if ( !function_exists( 'groundup_get_sidebar' ) ) {
 	function groundup_get_sidebar( ) {
 		$sidebars = array( 'Default' );
 		if ( is_front_page() ) {
-			$sidebars = array('Home');
+			$sidebars = array( 'Home' );
 		} elseif ( is_attachment() ) {
-			array_unshift($sidebars,'Image','Single');
+			array_unshift( $sidebars, 'Image', 'Single' );
 		} elseif ( is_single() || is_page() ) {
-			array_unshift($sidebars,'Single');
+			array_unshift( $sidebars, 'Single' );
 		} elseif ( is_category() ) {
-			array_unshift($sidebars,'Category');
+			array_unshift( $sidebars, 'Category' );
 		} elseif ( is_tax() ) {
-			array_unshift($sidebars,'Tag', 'Category');
+			array_unshift( $sidebars, 'Tag', 'Category' );
 		} elseif ( is_archive() ) {
-			array_unshift($sidebars,'Archive','Category');
+			array_unshift( $sidebars, 'Archive','Category' );
 		} elseif ( is_author() ) {
-			array_unshift($sidebars,'Author', 'Single');
+			array_unshift( $sidebars,'Author', 'Single' );
 		} elseif ( is_search() ) {
-			array_unshift($sidebars,'Search');
+			array_unshift( $sidebars,'Search' );
 		}
 		$sidebars = apply_filters( 'groundup_sidebars', $sidebars );
 		
