@@ -4,7 +4,7 @@
  */
 ?>
 <article <?php post_class(); ?>>
-	<?php $page_title = apply_filters( 'page_title', $page_title );
+	<?php $page_title = ! empty( $page_title ) ? apply_filters( 'page_title', $page_title ) : '';
 	if ( ! empty( $page_title ) ) { ?>
 		<header class="page-header">
 			<h2><?php echo $page_title; ?></h2>

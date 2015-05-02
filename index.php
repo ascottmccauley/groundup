@@ -9,14 +9,14 @@
 		// Display Header info
 		if ( is_search() ) {
 			$page_title = 'Results for <strong>"' . get_search_query() . '"</strong>'; 
-		} elseif ( !is_singular() && !is_front_page() ) {
+		} elseif ( ! is_singular() && ! is_front_page() ) {
 			$page_title = get_the_archive_title();
 			// remove everything before and including first :
 			if ( ( $pos = strpos( $page_title, ':' ) ) !== false ) {
-			   $page_title = substr($page_title, $pos + 1);
+			   $page_title = substr( $page_title, $pos + 1 );
 			}
 		}
-		$page_title = apply_filters( 'page_title', $page_title );
+		$page_title = ! empty( $page_title ) ? apply_filters( 'page_title', $page_title ) : '';
 		if ( ! empty( $page_title ) ) { ?>
 			<header class="page-header">
 				<h2><?php echo $page_title; ?></h2>
