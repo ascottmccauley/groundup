@@ -19,8 +19,8 @@ function is_register() {
 // Set a cookie after the first visit
 if ( !function_exists( 'groundup_new_user_cookie' ) ) {
 	function groundup_new_user_cookie() {
-		if ( ! $_COOKIE[ 'new_user' ] ) {
-			setcookie( 'new_user', '0', time()+3600*24*100, '/', $domain, false );
+		if ( ! array_key_exists( 'new_user', $_COOKIE ) && ! is_admin() && ! is_login() && ! is_register() ) {
+			setcookie( 'new_user', '0', time()+3600*24*100, '/', COOKIE_DOMAIN, false );
 		}
 	}
 }
@@ -29,11 +29,12 @@ add_action( 'init', 'groundup_new_user_cookie' );
 // Check to see if this is user's first visit
 if ( !function_exists( 'groundup_is_new_user' ) ) {
 	function groundup_is_new_user() {
-		if ( $_COOKIE[ 'new_user' ] == '0' ) {
-			return false;
-		} else {
-			return true;
+		if ( array_key_exists( 'new_user', $_COOKIE ) ) {
+			if ( $_COOKIE[ 'new_user' ] == '0' ) {
+				return false;
+			}
 		}
+		return true;
 	}	
 }
 
