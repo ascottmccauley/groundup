@@ -11,17 +11,18 @@ if ( !function_exists( 'groundup_is_cached' ) ) {
 	function groundup_is_cached() {
 		global $cached;
 		
-		$main_css_file = trailingslashit( get_stylesheet_directory() ) . 'assets/css/main.css';
-		if ( file_exists( $main_css_file ) ) {
-			$version = filemtime( $main_css_file );
-			if ( $_COOKIE[ 'cached' ] != $version || !$_COOKIE[ 'cached' ] ) {
-				$url = parse_url( get_site_url() );
-				$domain = $url['host'];
-				
-				setcookie( 'cached', $version, time()+3600*24*100, '/', $domain, false );
-				$cached = false;
-			}	else {
-				$cached = true;
+		if ( ! is_admin() && ! is_login() && ! is_register() ) {
+			$main_css_file = trailingslashit( get_stylesheet_directory() ) . 'assets/css/main.css';
+			if ( file_exists( $main_css_file ) ) {
+				$version = filemtime( $main_css_file );
+				if ( empty( $_COOKIE[ 'cached' ] ) || $_COOKIE[ 'cached' ] != $version ) {
+					$url = parse_url( get_site_url() );
+					$domain = $url['host'];
+					setcookie( 'cached', $version, time()+3600*24*100, '/', COOKIE_DOMAIN, false );
+					$cached = false;
+				}	else {
+					$cached = true;
+				}
 			}
 		}
 	}
