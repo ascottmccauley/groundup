@@ -20,10 +20,10 @@ if ( !function_exists( 'groundup_activation' ) ) {
 			add_filter( 'widget_text', 'shortcode_unautop' );
 			add_filter( 'widget_text', 'do_shortcode', 11 );
 			
-			// Change Uploads folder to /assets/media
+			// Change Uploads folder to /media
 			update_option( 'uploads_use_yearmonth_folders', 0 );
-			update_option( 'upload_path', 'assets/media' );
-			update_option( 'upload_url_path', get_home_url() . '/assets/media' );
+			update_option( 'upload_path', 'media' );
+			update_option( 'upload_url_path', get_home_url() . '/media' );
 			
 			// Pretty Permalinks
 			update_option( 'category_base', '/site/' );
