@@ -62,7 +62,7 @@ if ( !function_exists( 'groundup_compression' ) ) {
 		return $rewrites;
 	}
 }
-add_action( 'generate_rewrite_rules', 'groundup_compression');
+add_action( 'generate_rewrite_rules', 'groundup_compression' );
 
 // Add a few more url rewrites
 if ( !function_exists( 'groundup_add_rewrites' ) ) {
@@ -73,12 +73,12 @@ if ( !function_exists( 'groundup_add_rewrites' ) ) {
 			'login'         =>   'wp-login.php', // Removed in favor of a custom login page
 			'logout'        =>   'wp-login.php?action=logout', // No longer works without nonce
 			'admin/(.*)'    =>   'wp-admin/$1',
-			'register'      =>   'wp-login.php?action=register'
+			'register'      =>   'wp-login.php?action=register',
+			'assets/(.*)'   =>   'wp-content/themes/upandup/assets/$1',
 		);
-		$wp_rewrite->non_wp_rules = array_merge($wp_rewrite->non_wp_rules, $groundup_new_non_wp_rules);
-		
+		$wp_rewrite->non_wp_rules = array_merge( $wp_rewrite->non_wp_rules, $groundup_new_non_wp_rules );
+				
 		return $rewrites;
-		
 	}
 }
 add_action( 'generate_rewrite_rules', 'groundup_add_rewrites' );
