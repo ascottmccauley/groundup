@@ -84,7 +84,11 @@ if ( !function_exists( 'groundup_enqueue_scripts' ) ) {
 		
 		// add style specific to the admin-bar
 		if ( is_admin_bar_showing() ) {
-			wp_enqueue_style( 'groundup-admin-bar', get_stylesheet_directory_uri() . '/assets/css/admin-bar.css', NULL, '' );
+			// add inline style and defer main style
+			$admin_bar_css_file = trailingslashit( get_stylesheet_directory() ) . 'assets/css/admin-bar.css';
+			if ( file_exists( $admin_bar_css_file ) ) {
+				wp_enqueue_style( 'groundup-admin-bar', get_stylesheet_directory_uri() . '/assets/css/admin-bar.css', NULL, '' );
+			}
 		}
 	}
 }
