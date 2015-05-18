@@ -70,8 +70,8 @@ if ( !function_exists( 'groundup_add_rewrites' ) ) {
 		global $wp_rewrite;
 		
 		$groundup_new_non_wp_rules = array(
-			'login'         =>   'wp-login.php', // Removed in favor of a custom login page
-			'logout'        =>   'wp-login.php?action=logout', // No longer works without nonce
+			'login'         =>   'wp-login.php',
+			'logout'        =>   'wp-login.php?action=logout',
 			'admin/(.*)'    =>   'wp-admin/$1',
 			'register'      =>   'wp-login.php?action=register',
 			'assets/(.*)'   =>   'wp-content/themes/upandup/assets/$1',
@@ -166,9 +166,9 @@ if ( !function_exists( 'groundup_login_redirect' ) ) {
 		if ( isset ( $_REQUEST['redirect_to'] ) ) {
 			// check redirect value first
 			$redirect = filter_var( $_REQUEST['redirect_to'], FILTER_SANITIZE_URL );
-		} elseif ( isset($user->roles) && is_array($user->roles) ) {
+		} elseif ( isset( $user->roles ) && is_array( $user->roles ) ) {
 			// check if user is an admin next
-			$redirect = in_array('administrator', $user->roles) ? admin_url() : home_url();
+			$redirect = in_array( 'administrator', $user->roles ) ? admin_url() : home_url();
 		}
 		return $redirect;
 	}
@@ -213,7 +213,7 @@ add_action( 'login_form_logout', 'groundup_logout' );
 // Note: This only works for failed logins; empty logins use groundup_empty_login_redirect
 if ( !function_exists( 'groundup_failed_login_redirect' ) ) {
 	function groundup_failed_login_redirect( $username ) {
-		if ( isset( $_SERVER['HTTP_REFERER'] ) ) {
+		if ( isset( $_SERVER['HTTP_REFERER'] ) && isset( $_POST['wp-submit'] ) ) {
 			$referrer = $_SERVER['HTTP_REFERER'];
 			// if there's a valid referrer, and it's not the default log-in screen
 			if ( !empty( $referrer ) && ! strstr( $referrer,'wp-login' ) && ! strstr( $referrer, 'wp-admin' ) ) {
@@ -235,7 +235,7 @@ add_action( 'wp_login_failed', 'groundup_failed_login_redirect' );
 if ( !function_exists( 'groundup_empty_login_redirect' ) ) {
 	function groundup_empty_login_redirect( $user, $username, $password ) {
 		if ( $username == '' || $password == '' ) {
-			if ( isset($_SERVER['HTTP_REFERER'] ) ) {
+			if ( isset( $_SERVER['HTTP_REFERER'] ) && isset( $_POST['wp-submit'] ) ) {
 				$referrer = $_SERVER['HTTP_REFERER'];
 				// if there's a valid referrer, and it's not the default log-in screen and there is no username
 				if ( !empty( $referrer ) && strstr( $referrer, 'logout' ) ) {
