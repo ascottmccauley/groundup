@@ -42,7 +42,7 @@ if ( current_user_can( 'edit_posts' ) ) {
 		}
 		return $file;
 	}
-	//add_filter( 'wp_handle_upload_prefilter', 'groundup_remove_duplicate_attachment' );
+	add_filter( 'wp_handle_upload_prefilter', 'groundup_remove_duplicate_attachment' );
 	
 	// change image suffixes to <filename>-<image_size>
 	// TODO: Don't think this will work if multiple sizes share width or height
