@@ -16,7 +16,7 @@ remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
 remove_action( 'wp_print_styles', 'print_emoji_styles' );
 add_theme_support( 'admin-bar', array( 'callback' => '__return_false' ) );
 
-// Enable compression in .htaccess
+// Enable compression in .htaccess for apache
 if ( !function_exists( 'groundup_compression' ) ) {
 	function groundup_compression( $rewrites ) {
 		global $wp_rewrite;
@@ -66,7 +66,7 @@ if ( !function_exists( 'groundup_compression' ) ) {
 }
 add_action( 'generate_rewrite_rules', 'groundup_compression' );
 
-// Add a few more url rewrites
+// Add a few more url rewrites for apache
 if ( !function_exists( 'groundup_add_rewrites' ) ) {
 	function groundup_add_rewrites( $rewrites ) {
 		global $wp_rewrite;
