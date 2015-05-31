@@ -7,7 +7,9 @@
 // html is opened in header.php
 // body is opened in header.php
 ?>
+<?php do_action( 'groundup_before_footer' ); ?>
 <footer id="footer">
+    <?php do_action( 'groundup_inside_footer' ); ?>
 	<?php if ( has_nav_menu( 'footer' ) ) {
 		wp_nav_menu( array( 'theme_location' => 'footer', 'container' => 'false' ) );
 	} else { ?>
