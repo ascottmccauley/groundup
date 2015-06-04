@@ -77,7 +77,10 @@ if ( !function_exists( 'groundup_enqueue_scripts' ) ) {
 						webkitRequestAnimationFrame || msRequestAnimationFrame;
 						if (raf) raf(cb);
 						else window.addEventListener("load", cb);
-					</script>';
+					</script>
+					<noscript>
+						<link type="text/css" rel="stylesheet" href="' . get_stylesheet_directory_uri() . '/assets/css/main.css?ver=' . $main_css_ver . '">
+					</noscript>';
 				}
 			}
 		}
