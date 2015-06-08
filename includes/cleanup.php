@@ -277,7 +277,7 @@ if ( !function_exists( 'groundup_search_url_rewrite' ) ) {
 		}
 	}
 }
-add_action( 'template_redirect', 'groundup_search_url_rewrite' );
+//add_action( 'template_redirect', 'groundup_search_url_rewrite' );
 
 // Allows tax_queries to be searched using $_GET variables
 // Just add <input type="hidden" name="tax_query[taxonomy_name]" value="tax_term" /> to the searchfrom
