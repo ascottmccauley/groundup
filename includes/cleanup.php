@@ -16,7 +16,7 @@ remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
 remove_action( 'wp_print_styles', 'print_emoji_styles' );
 add_theme_support( 'admin-bar', array( 'callback' => '__return_false' ) );
 
-// Enable compression in .htaccess for apache
+// Enable compression in .htaccess
 if ( !function_exists( 'groundup_compression' ) ) {
 	function groundup_compression( $rewrites ) {
 		global $wp_rewrite;
@@ -66,7 +66,7 @@ if ( !function_exists( 'groundup_compression' ) ) {
 }
 add_action( 'generate_rewrite_rules', 'groundup_compression' );
 
-// Add a few more url rewrites for apache
+// Add a few more url rewrites
 if ( !function_exists( 'groundup_add_rewrites' ) ) {
 	function groundup_add_rewrites( $rewrites ) {
 		global $wp_rewrite;
@@ -328,12 +328,15 @@ add_action( 'widgets_init', 'groundup_remove_recent_comments_style' );
 // Adds an "edit" link for admins
 if ( !function_exists( 'groundup_nav_menu_items' ) ) {
 	function groundup_nav_menu_items( $items, $args ) {
-		// Get menus 
-		$menu_locations = get_nav_menu_locations();
-		$menu_object = get_term( $menu_locations[ $args->theme_location ], 'nav_menu' );
-		
+		// Get menus
+		if ( isset ( $args->menu ) ) {
+			$menu_object = get_term_by( 'slug', $args->menu, 'nav_menu' );
+		} elseif ( isset ( $args->location ) ) {
+			$menu_locations = get_nav_menu_locations();
+			$menu_object = get_term( $menu_locations[ $args->theme_location ], 'nav_menu' );
+		}
 		// Only add items if menu is not empty
-		if ( $menu_object->count != 0 ) {
+		if ( isset( $menu_object->count ) && $menu_object->count != 0 ) {
 			// Add edit link
 			if ( current_user_can( 'manage_options' ) ) {
 				$items .= '<li class="edit"><a href="' . admin_url( 'nav-menus.php' ) . '?action=edit&menu=' . $menu_object->term_id . '">Edit Menu</a></li>';
