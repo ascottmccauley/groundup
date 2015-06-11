@@ -22,21 +22,21 @@
 				<h2><?php echo $page_title; ?></h2>
 			</header>
 		<?php } ?>
-		
-		<?php while( have_posts() ) : the_post(); 
-			$post_type = get_post_type();
-			if ( $post_type == 'post' ) {
-				$post_type = get_post_format();
-			}
-			if ( is_single() || is_page() ) {
-				get_template_part( 'templates/single', $post_type );
-			} else {
-				get_template_part( 'templates/excerpt', $post_type );
-			}
-		endwhile;
-		
-	} ?>
-	
+		<div class="loop">
+			<?php while( have_posts() ) : the_post(); 
+				$post_type = get_post_type();
+				if ( $post_type == 'post' ) {
+					$post_type = get_post_format();
+				}
+				if ( is_single() || is_page() ) {
+					get_template_part( 'templates/single', $post_type );
+				} else {
+					get_template_part( 'templates/excerpt', $post_type );
+				}
+			endwhile;
+
+		} ?>
+	</div>
 	<?php get_template_part( 'templates/pagination' ); ?>
 	
 </main>
