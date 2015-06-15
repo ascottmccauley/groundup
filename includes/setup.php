@@ -129,8 +129,6 @@ if ( !function_exists( 'groundup_setup' ) ) {
 	}
 }
 add_action( 'init', 'groundup_setup' );
-add_image_size( 'tiny', '60', '60', true );
-add_image_size( 'small', '120', '120', false );
 
 // Create default menus
 // @filters: groundup_menus - an array of all the menus to be created
