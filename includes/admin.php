@@ -64,8 +64,15 @@ if ( current_user_can( 'edit_posts' ) ) {
 		$image_sizes = get_intermediate_image_sizes();
 		
 		foreach ( $image_sizes as $size ) {
+			$rename = false;
 			$sizeInfo = get_image_size_data( $size );
-			if ( $img_size['width'] == $sizeInfo['width'] || $img_size['height'] == $sizeInfo['height'] ) {
+			if ( $img_size['width'] == $sizeInfo['width'] && $img_size['height'] <= $sizeInfo['height'] ) {
+				$rename = true;	
+			} elseif ( $img_size['height'] == $sizeInfo['height'] && $img_size['width'] <= $sizeInfo['width'] ) {
+				$rename = true;	
+			}
+			
+			if ( $rename == true ) {
 				// Rename image
 				$new_name = $dir . $image_name . '-' . $size . $ext;
 				
