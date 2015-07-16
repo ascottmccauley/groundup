@@ -24,7 +24,8 @@ Template Name: Sitemap
 		<?php // Loop through all public queryable post_types
 		$post_types = get_post_types( array( 'public' => true ), 'objects' );
 		foreach ( $post_types as $name => $post_type) {
-			if ( in_array( $name, array( 'media', 'page', 'attachment' ) ) ) {
+			$post_count = wp_count_posts( $post_type->name, 'readable' );
+			if ( in_array( $name, array( 'media', 'page', 'attachment' ) ) || $post_count->publish == 0 ) {
 				continue;
 			}
 			$labels = $post_type->labels; ?>
@@ -34,12 +35,13 @@ Template Name: Sitemap
 				$taxonomies = get_object_taxonomies( $post_type->name, 'objects' );
 				foreach ( $taxonomies as $taxonomy ) {
 					if ( $taxonomy->hierarchical == true  && $taxonomy->public == true && $taxonomy->query_var != false ) {
-						wp_list_categories( array( 
+						wp_list_categories( array(
 							'taxonomy' => $taxonomy->name,
 							'show_count' => 1,
 							'hierarchical' => 1,
-							'title_li' => '',
+							'title_li' => '<strong>' . $taxonomy->labels->name . '</strong>',
 							'order_by' => 'term_group',
+							'pad_counts' => 1,
 						) );
 					}
 				} ?>
