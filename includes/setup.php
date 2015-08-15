@@ -10,56 +10,56 @@ if ( !function_exists( 'groundup_activation' ) ) {
 		// Check to see if activation has already been run
 		if ( !get_option( 'groundup_activated' ) == 'activated' ) {
 			add_option( 'groundup_activated', 'activated' );
-			
+
 			// Remove default site description
 			if ( get_bloginfo('description') == 'Just another WordPress site' ) {
 				update_option( 'blogdescription','' );
 			}
-			
+
 			// Allow shortcodes in widgets
 			add_filter( 'widget_text', 'shortcode_unautop' );
 			add_filter( 'widget_text', 'do_shortcode', 11 );
-			
+
 			// Change Uploads folder to /media
 			update_option( 'uploads_use_yearmonth_folders', 0 );
 			update_option( 'upload_path', 'media' );
-			update_option( 'upload_url_path', get_home_url() . '/media' );
-			
+			update_option( 'upload_url_path', get_home_url() . 'media' );
+
 			// Pretty Permalinks
 			update_option( 'category_base', '/site/' );
 			update_option( 'permalink_structure', '/%category%/%postname%/' );
-			
+
 			// change start of week to Sunday
 			update_option( 'start_of_week', 0 );
-			
+
 			// Change default 'Uncategorized' to 'General'
 			$category = get_term_by( 'id', '1', 'category' );
 			if ( $category->name == 'Uncategorized' ) {
 				$category->name = 'General';
 				$category->slug = strtolower( str_replace( '_', ' ', 'general' ) );
-			}	
+			}
 			wp_update_term( $category->term_id, 'category', array( 'slug' => $category->slug, 'name'=> $category->name ) );
-			
+
 			// Disable Smilies
 			update_option( 'use_smilies', 0 );
-			
+
 			// Set default comment status to closed
 			update_option( 'default_comment_status', 'closed' );
 			update_option( 'default_ping_status', 'closed' );
-			
+
 			// Set Timezone
 			$timezone = "America/New_York";
 			//$timezone = "America/Chicago";
 			//$timezone = "America/Denver";
 			//$timezone = "America/Los_Angeles";
 			update_option( 'timezone_string', $timezone );
-			
+
 			// Clean up widget settings that weren't set at installation to prevent unecessary queries
 			add_option( 'widget_pages', array( '_multiwidget' => 1 ) );
 			add_option( 'widget_calendar', array( '_multiwidget' => 1 ) );
 			add_option( 'widget_tag_cloud', array( '_multiwidget' => 1 ) );
 			add_option( 'widget_nav_menu', array( '_multiwidget' => 1 ) );
-			
+
 			// Update default media sizes - additional sizes are added through groundup_init
 			update_option( 'thumbnail_size_w', 330 );
 			update_option( 'thumbnail_size_h', 330 );
@@ -70,9 +70,10 @@ if ( !function_exists( 'groundup_activation' ) ) {
 			update_option( 'large_size_h', 800 );
 			update_option( 'embed_size_w', 1200 );
 			update_option( 'embed_size_h', 800 );
-			
+
 			// Add default menus
-			groundup_create_nav_menus( array( 'Primary', 'Secondary', 'Mobile', 'Footer' ) );				
+			groundup_register_nav_menus( array( 'Primary', 'Secondary', 'Mobile', 'Footer' ) );
+			groundup_create_nav_menus( array( 'Primary', 'Secondary', 'Mobile', 'Footer' ) );
 		}
 	}
 }
@@ -92,40 +93,40 @@ add_action( 'after_switch_theme', 'groundup_deactivation' );
 // Basic Settings that must run every page load
 if ( !function_exists( 'groundup_setup' ) ) {
 	function groundup_setup() {
-		
+
 		// Default Comment Status
 		update_option( 'default_comment_status', 'closed' );
 		update_option( 'default_ping_status', 'closed' );
-		
+
 		// Disable Smilies
 		update_option( 'use_smilies', 0);
-		
+
 		// Add support for featured thumbnails
 		// See http://codex.wordpress.org/Post_Thumbnails
 		add_theme_support( 'post-thumbnails' );
-		
+
 		// Allow WordPress to choose the most appropriate title tag
 		// See http://codex.wordpress.org/Title_Tag
 		add_theme_support( 'title-tag' );
-		
+
 		// Add support for html5 markup
 		// See http://codex.wordpress.org/Semantic_Markup
 		add_theme_support( 'html5', array( 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption' ) );
-		
+
 		// Add support for post formats
 		// See http://codex.wordpress.org/Post_Formats
 		add_theme_support( 'post-formats', array( 'aside', 'image', 'video', 'quote', 'link', 'gallery' ) );
-		
+
 		// allow shortcodes in widgets
 		add_filter( 'widget_text', 'do_shortcode' );
-		
+
 		// Add default menu locations
-		groundup_register_nav_menus( array( 'Primary', 'Secondary', 'Mobile', 'Footer' ) );				
-		
+		groundup_register_nav_menus( array( 'Primary', 'Secondary', 'Mobile', 'Footer' ) );
+
 		// Additional image sizes
 		add_image_size( 'tiny', '60', '60', true );
-		add_image_size( 'small', '120', '120', false );	
-		
+		add_image_size( 'small', '120', '120', false );
+
 	}
 }
 add_action( 'init', 'groundup_setup' );
@@ -135,13 +136,13 @@ add_action( 'init', 'groundup_setup' );
 if ( !function_exists( 'groundup_create_nav_menus' ) ) {
 	function groundup_create_nav_menus( $menus ) {
 		$menus = apply_filters( 'groundup_menus', $menus );
-		
+
 		foreach ( $menus as $menu ) {
 			$slug = strtolower( str_replace ( '_', ' ', $menu ) );
 			// create menu if it doesn't exist yet
 			if ( !wp_get_nav_menu_object( $slug ) ) {
 				$menu_ID = wp_create_nav_menu( ucwords( __( $menu, 'groundup' ) ), array( 'slug' => $slug ) );
-				
+
 				// Add menu to it's correct location
 				$menu_obj = wp_get_nav_menu_object( $slug );
 				$locations = get_theme_mod( 'nav_menu_locations' );
