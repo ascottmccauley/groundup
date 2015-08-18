@@ -56,7 +56,7 @@ if ( !function_exists( 'groundup_compression' ) ) {
 	# Opera occasionally pretends to be IE with Mozilla/4.0
 	BrowserMatch \bOpera !no-gzip
 	</IfModule>";
-				
+
 				$gzip = explode( "\n", $gzip );
 				return insert_with_markers( $htaccess_file, 'gzip', $gzip );
 			}
@@ -70,7 +70,7 @@ add_action( 'generate_rewrite_rules', 'groundup_compression' );
 if ( !function_exists( 'groundup_add_rewrites' ) ) {
 	function groundup_add_rewrites( $rewrites ) {
 		global $wp_rewrite;
-		
+
 		$groundup_new_non_wp_rules = array(
 			'login'         =>   'wp-login.php',
 			'logout'        =>   'wp-login.php?action=logout',
@@ -79,7 +79,7 @@ if ( !function_exists( 'groundup_add_rewrites' ) ) {
 			'assets/(.*)'   =>   'wp-content/themes/upandup/assets/$1',
 		);
 		$wp_rewrite->non_wp_rules = array_merge( $wp_rewrite->non_wp_rules, $groundup_new_non_wp_rules );
-				
+
 		return $rewrites;
 	}
 }
@@ -107,7 +107,7 @@ if ( !function_exists( 'groundup_robots_txt' ) ) {
 		Disallow: /*?
 		Disallow: /*~*
 		Disallow: /*~
-		
+
 		Sitemap: ' . get_home_url() . '/sitemap.xml';
 		$output .= $robots_txt;
 		return $output;
@@ -133,7 +133,7 @@ if ( !function_exists( 'groundup_clean_img' ) ) {
 }
 add_filter( 'post_thumbnail_html', 'groundup_clean_img', 10 );
 add_filter( 'image_send_to_editor', 'groundup_clean_img', 10 );
-add_filter( 'the_content', 'groundup_clean_img', 10 ); 
+add_filter( 'the_content', 'groundup_clean_img', 10 );
 
 // remove "Private: " and "Protected: " from titles
 if ( !function_exists( 'groundup_title_format' ) ) {
@@ -150,7 +150,7 @@ if ( !function_exists( 'groundup_excerpt_shortcodes' ) ) {
 		$raw_excerpt = $excerpt;
 		if ( '' == $excerpt ) {
 			$excerpt = get_the_content();
-			$excerpt = preg_replace( "~(?:\[/?)[^/\]]+/?\]~s", '', $excerpt );  # strip shortcodes, keep shortcode content		
+			$excerpt = preg_replace( "~(?:\[/?)[^/\]]+/?\]~s", '', $excerpt );  # strip shortcodes, keep shortcode content
 			$excerpt_length = apply_filters( 'excerpt_length', 55 );
 			$excerpt_more = apply_filters( 'excerpt_more', ' ' . '[...]' );
 			$excerpt = wp_trim_words( $excerpt, $excerpt_length, $excerpt_more );
@@ -221,7 +221,7 @@ if ( !function_exists( 'groundup_failed_login_redirect' ) ) {
 			if ( !empty( $referrer ) && ! strstr( $referrer,'wp-login' ) && ! strstr( $referrer, 'wp-admin' ) ) {
 				if ( !strstr( $referrer, '?login=failed' ) ) {
 					 // Append some information (login=failed) to the URL for the theme to use
-					wp_safe_redirect( $referrer . '?login=failed' ); 
+					wp_safe_redirect( $referrer . '?login=failed' );
 				}else {
 					wp_safe_redirect( $referrer );
 				}
@@ -245,7 +245,7 @@ if ( !function_exists( 'groundup_empty_login_redirect' ) ) {
 					exit;
 				}elseif ( ! empty( $referrer ) && ! strstr( $referrer, 'wp-login' ) && ! strstr( $referrer, 'wp-admin' ) && ! strstr( $referrer, '?login=empty' ) ) {
 					// Append some information (login=failed) to the URL for the theme to use
-					wp_safe_redirect( $referrer . '?login=empty' ); 
+					wp_safe_redirect( $referrer . '?login=empty' );
 					exit;
 				}
 			}
@@ -258,19 +258,19 @@ add_filter( 'authenticate', 'groundup_empty_login_redirect', 1, 3 );
 if ( !function_exists( 'groundup_search_url_rewrite' ) ) {
 	function groundup_search_url_rewrite() {
 		global $wp_rewrite;
-		
+
 		if ( !isset( $wp_rewrite ) || !is_object( $wp_rewrite ) || !$wp_rewrite->using_permalinks() ) {
 			return;
 		}
-		
+
 		$search_base = $wp_rewrite->search_base;
-		
+
 		$query_vars = $_GET;
 		unset( $query_vars['s'] );
 		$query_string = http_build_query( $query_vars );
 		$query_string = str_replace( '%5B', '[', $query_string );
 		$query_string = str_replace( '%5D', ']', $query_string );
-		
+
 		if ( is_search() && !is_admin() && strpos($_SERVER['REQUEST_URI'], "/{$search_base}/") === false ) {
 			wp_safe_redirect( home_url( "/{$search_base}/" . urlencode(get_query_var('s') ) ) . '?' . $query_string );
 			exit();
@@ -330,8 +330,8 @@ if ( !function_exists( 'groundup_nav_menu_items' ) ) {
 	function groundup_nav_menu_items( $items, $args ) {
 		// Get menus
 		if ( isset ( $args->menu ) ) {
-			$menu_object = get_term_by( 'slug', $args->menu, 'nav_menu' );
-		} elseif ( isset ( $args->location ) ) {
+			$menu_object = wp_get_nav_menu_object( $args->menu );
+		} elseif ( isset ( $args->theme_location ) ) {
 			$menu_locations = get_nav_menu_locations();
 			$menu_object = get_term( $menu_locations[ $args->theme_location ], 'nav_menu' );
 		}
@@ -352,7 +352,7 @@ if ( !function_exists( 'groundup_nav_menu_item_id' ) ) {
 	function groundup_nav_menu_item_id( ) {
 		return null;
 	}
-} 
+}
 add_filter( 'nav_menu_item_id', 'groundup_nav_menu_item_id' );
 
 // clean up menu item classes to only include the menu-slug
@@ -360,24 +360,24 @@ if ( !function_exists( 'groundup_nav_menu_css_class' ) ) {
 	function groundup_nav_menu_css_class( $classes, $item ) {
 		// replace `current-menu-item`, `current_page_item`... with just `current`
 		$classes = preg_replace( '/(current(-menu-|[-_]page[-_])(item|parent|ancestor))/', 'current', $classes );
-		
+
 		// remove default WP classes like `menu-item-type-post_type`, `menu-item-object-paage`...
 		$classes = preg_replace( '/^((menu|page)[-_\w+]+)+/', '', $classes );
-		
+
 		// Add menu slug
 		$slug = sanitize_title( $item->title );
 		$classes[] = 'menu-' . $slug;
-		
+
 		foreach ( $classes as $class ) {
 			$class = trim( $class );
 		}
-		
+
 		// remove duplicates and empty values
 		$classes = array_filter( array_unique( $classes ) );
 
 		return $classes;
 	}
-} 
+}
 add_filter( 'nav_menu_css_class', 'groundup_nav_menu_css_class', 10, 2 );
 
 // Create a sitemap.xml every time a post is saved
@@ -390,7 +390,7 @@ if ( !function_exists( 'groundup_create_sitemap' ) ) {
 		} else {
 			$output = '<?xml version="1.0" encoding="UTF-8"?>';
 			$output .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-			
+
 			$post_types = get_post_types();
 			$posts = get_posts( array (
 				'numberposts' => -1,
@@ -398,10 +398,10 @@ if ( !function_exists( 'groundup_create_sitemap' ) ) {
 				'post_type' => $post_types,
 				'order' => 'DESC',
 			) );
-			
+
 			foreach ( $posts as $post ) {
 				setup_postdata( $post );
-				
+
 				$postdate = explode( ' ', $post->post_modified );
 				$output .= '
 	<url>
@@ -411,7 +411,7 @@ if ( !function_exists( 'groundup_create_sitemap' ) ) {
 	</url>';
 			}
 			$output .= '</urlset>';
-			
+
 			// Write output to sitemap.xml
 			$url = wp_nonce_url( 'post.php?action=edit', 'groundup-sitemap' );
 			if ( false === ( $creds = request_filesystem_credentials( $url , '', false, false, null ) ) ) {
