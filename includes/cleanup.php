@@ -425,7 +425,7 @@ if ( !function_exists( 'groundup_create_sitemap' ) ) {
 			global $wp_filesystem;
 			$home_path = function_exists('get_home_path') ? get_home_path() : ABSPATH;
 			if ( ! $wp_filesystem->put_contents( trailingslashit( $home_path ) . 'sitemap.xml', $output, FS_CHMOD_FILE ) ) {
-				add_action ('admin_notices', create_function( '', "echo '<div class=\"error\"><p>There is a problem saving the sitemap.xml file</p></div>';" ) );
+				add_action ( 'admin_notices', create_function( '', "echo '<div class=\"error\"><p>There is a problem saving the sitemap.xml file</p></div>';" ) );
 			}
 		}
 		return $post_id;
