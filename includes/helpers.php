@@ -34,7 +34,7 @@ if ( !function_exists( 'groundup_is_new_user' ) ) {
 		} else {
 			return true;
 		}
-	}	
+	}
 }
 
 // For internet Exploder below 9.0 display a simple alert notifying them to update
@@ -74,7 +74,7 @@ if ( !function_exists( 'groundup_get_sidebar' ) ) {
 			array_unshift( $sidebars,'Search' );
 		}
 		$sidebars = apply_filters( 'groundup_sidebars', $sidebars );
-		
+
 		// Loop through possible sidebars until one has widgets
 		$groundup_sidebar = null;
 		foreach ( $sidebars as $sidebar ) {
@@ -87,16 +87,32 @@ if ( !function_exists( 'groundup_get_sidebar' ) ) {
 	}
 }
 
+// Get menu object by location first, if none is assigned, look for menu with same name
+if ( !function_exists( 'groundup_get_menu_object' ) ) {
+	function groundup_get_menu_object( $menu ) {
+		$menu = strtolower( str_replace ( '_', ' ', $menu ) );
+		$locations = get_nav_menu_locations();
+		if ( in_array( $menu, $locations ) ) {
+			$menu_object = wp_get_nav_menu_object( $locations[$menu] );
+			if ( $menu_object != WP_Error ) {
+				return $menu_object;
+			}
+		}
+		$menu_object = wp_get_nav_menu_object( $menu );
+		return $menu_object;
+	}
+}
+
 // Displays time as XYZ days/hours/minutes ago
 function get_time_ago( $time ) {
 	$difference = time() - $time;
-	
+
 	$min_in_secs = 60;
 	$hour_in_secs = 3600;
 	$day_in_secs = 86400;
 	$month_in_secs = $day_in_secs * 31;
 	$year_in_secs = $day_in_secs * 366;
-	
+
 	if ( $difference > $year_in_secs ) {
 		return 'over ' . floor( $difference / $year_in_secs ) . __( ' years ago', 'groundup' );
 	}else {
@@ -117,7 +133,7 @@ function get_date_range($startDate = '', $endDate = '', $separator = ' - ') {
 			$range = date( 'F j<\s\up>S</\s\up>', $startDate ) . $separator . date( 'F j<\s\up>S</\s\up>, Y', $endDate );
 		}else {
 			// Different Days
-			$range = date( 'F j<\s\up>S</\s\up>', $startDate ) . $separator . date( 'j<\s\up>S</\s\up>, Y', $endDate ); 
+			$range = date( 'F j<\s\up>S</\s\up>', $startDate ) . $separator . date( 'j<\s\up>S</\s\up>, Y', $endDate );
 		}
 	}else {
 		// only 1 date, so just make that pretty
@@ -162,7 +178,7 @@ function get_exif ( $att, $separator = '', $before = '', $after = '' ) {
 			} else {
 				$pshutter = $imgmeta['image_meta']['shutter_speed'] . " seconds";
 			}
-			
+
 			$output = $before;
 			$output .=  '<time datetime="' . date('c', $imgmeta['image_meta']['created_timestamp']) . '"><span class="month">' . date('F', $imgmeta['image_meta']['created_timestamp']).'</span> <span class="day">'.date('j', $imgmeta['image_meta']['created_timestamp']) . '</span><span class="suffix">' . date('S', $imgmeta['image_meta']['created_timestamp']) . '</span> <span class="year">' . date('Y', $imgmeta['image_meta']['created_timestamp']) . '</span></time>' . $separator;
 			$output .=  $imgmeta['image_meta']['camera'] . $separator;
@@ -207,7 +223,7 @@ if ( !function_exists( 'groundup_get_avatar' ) ) {
 		}else {
 			$email = $id_or_email;
 		}
-		
+
 		// Create gravatar url using placeholder or 404
 		if ( $placeholder != '404' ) {
 			$placeholder = urlencode( $placeholder );
@@ -217,9 +233,9 @@ if ( !function_exists( 'groundup_get_avatar' ) ) {
 		if ( !strpos($headers[0],'200' ) ) {	// no avatar
 			return '';
 		}
-		
+
 		$avatar = '<img src="' . $image . '" class="avatar" alt="' . $authorName . '">';
-		
+
 		if ( $authorURL ) {
 			return '<a href="' . $authorURL . '" rel="external nofollow">' . $avatar . '</a>';
 		}else { // no URL
@@ -237,7 +253,7 @@ function is_parent_category( $cat = null ) {
 	} elseif ( is_null( $cat ) )  {
 		$category = get_queried_object()  ;
 	}
-	
+
 	$children = get_categories( "parent={$category->term_id}" );
 	if ( !empty( $children ) ) {
 		return true;
@@ -255,7 +271,7 @@ function is_child_category( $cat = null ) {
 	} elseif ( is_null($cat ) )  {
 		$category = get_queried_object()  ;
 	}
-	
+
 	if ( $category->parent != 0 ) {
 		return true;
 	}else {
@@ -263,7 +279,7 @@ function is_child_category( $cat = null ) {
 	}
 }
 
-// Returns an array of the max-width and max-height and crop of the requested image size 
+// Returns an array of the max-width and max-height and crop of the requested image size
 function get_image_size_data( $size = 'thumbnail' ) {
 	$default_image_sizes = array('thumbnail', 'medium', 'large'); // Standard sizes
 	if ( in_array($size, $default_image_sizes ) ) {
