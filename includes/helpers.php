@@ -93,8 +93,10 @@ if ( !function_exists( 'groundup_get_menu_object' ) ) {
 		$menu = strtolower( str_replace ( '_', ' ', $menu ) );
 		$locations = get_nav_menu_locations();
 		if ( in_array( $menu, $locations ) ) {
+			var_dump('locations: ');
+			var_dump($locations);
 			$menu_object = wp_get_nav_menu_object( $locations[$menu] );
-			if ( $menu_object != WP_Error ) {
+			if ( ! is_wp_error ( $menu_object ) ) {
 				return $menu_object;
 			}
 		}
