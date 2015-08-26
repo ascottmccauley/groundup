@@ -23,7 +23,7 @@ if ( !function_exists( 'groundup_activation' ) ) {
 			// Change Uploads folder to /media
 			update_option( 'uploads_use_yearmonth_folders', 0 );
 			update_option( 'upload_path', 'media' );
-			update_option( 'upload_url_path', get_home_url() . 'media' );
+			update_option( 'upload_url_path', get_home_url() . '/media' );
 
 			// Pretty Permalinks
 			update_option( 'category_base', '/site/' );

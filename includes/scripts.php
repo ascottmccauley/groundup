@@ -10,7 +10,7 @@
 if ( !function_exists( 'groundup_is_cached' ) ) {
 	function groundup_is_cached() {
 		global $cached;
-		
+
 		if ( ! is_admin() && ! is_login() && ! is_register() ) {
 			$main_css_file = trailingslashit( get_stylesheet_directory() ) . 'assets/css/main.css';
 			if ( file_exists( $main_css_file ) ) {
@@ -34,11 +34,11 @@ if ( !function_exists( 'groundup_enqueue_scripts' ) ) {
 	function groundup_enqueue_scripts() {
 		// variable set on init from `groundup_defer_css` to determine whether or not assets have been cached
 		global $cached;
-		
+
 		// Replace WP jquery with google CDN and include a local fallback
 		wp_deregister_script('jquery');
 		wp_register_script( 'jquery', '//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js', array(), '2.1.3', false );
-		
+
 		// enqueue main js
 		$main_js_file = get_stylesheet_directory() . '/assets/js/main.js';
 		if ( file_exists( $main_js_file ) ) {
@@ -47,20 +47,20 @@ if ( !function_exists( 'groundup_enqueue_scripts' ) ) {
 			// add fallback local jquery after the CDN
 			add_filter('script_loader_src', 'groundup_local_jquery_fallback', 10, 2);
 		}
-		
+
 		// add main style
 		$main_css_file = get_stylesheet_directory() . '/assets/css/main.css';
 		if ( file_exists( $main_css_file ) ) {
 			$main_css_ver = filemtime( $main_css_file );
 			wp_enqueue_style( 'groundup-main', get_stylesheet_directory_uri() . '/assets/css/main.css', NULL, $main_css_ver );
 		}
-		
+
 		// add inline style and defer main style
 		$inline_css_file = trailingslashit( get_stylesheet_directory() ) . 'assets/css/inline.css';
 		if ( file_exists( $inline_css_file ) && $cached != true ) {
 			// add inline style to head
 			echo '<style>' . file_get_contents( $inline_css_file ) . '</style>';
-		
+
 			// defer main style
 			if ( file_exists( $main_css_file ) ) {
 				wp_dequeue_style( 'groundup-main' );
@@ -84,7 +84,7 @@ if ( !function_exists( 'groundup_enqueue_scripts' ) ) {
 				}
 			}
 		}
-		
+
 		// add style specific to the admin-bar
 		if ( is_admin_bar_showing() ) {
 			// add inline style and defer main style
