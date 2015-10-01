@@ -16,11 +16,27 @@ function is_register() {
 	return in_array( $GLOBALS['pagenow'], array( 'wp-register.php' ) );
 }
 
-// Set a cookie after the first visit
+// Set a cookie after the first visit and increment with every visit
 if ( !function_exists( 'groundup_new_user_cookie' ) ) {
 	function groundup_new_user_cookie() {
-		if ( empty( $_COOKIE['new_user'] ) && ! is_admin() && ! is_login() && ! is_register() ) {
-			setcookie( 'new_user', '0', time()+3600*24*100, '/', COOKIE_DOMAIN, false );
+		// start a new session to track new visits expires after 30 minutes
+		session_start();
+		if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 1800)) {
+		    // last request was more than 30 minutes ago
+		    session_unset();     // unset $_SESSION variable for the run-time
+		    session_destroy();   // destroy session data in storage
+		}
+		$_SESSION['last_activity'] = time(); // update last activity time stamp
+		if ( ! isset( $_SESSION['new_user_check'] ) ) {
+			$_SESSION['new_user_check'] = '1';
+			if ( ! is_admin() && ! is_login() && ! is_register() ) {
+				if ( ! isset( $_COOKIE['new_user'] ) ) {
+					$visit = 0;
+				} else {
+					$visit = $_COOKIE['new_user'] + 1;
+				}
+				setcookie( 'new_user', $visit, time()+3600*24*100, '/', COOKIE_DOMAIN, false );
+			}
 		}
 	}
 }
@@ -29,10 +45,21 @@ add_action( 'init', 'groundup_new_user_cookie' );
 // Check to see if this is user's first visit
 if ( !function_exists( 'groundup_is_new_user' ) ) {
 	function groundup_is_new_user() {
-		if ( isset( $_COOKIE['new_user'] ) && $_COOKIE[ 'new_user' ] == '0' ) {
-			return false;
-		} else {
+		if ( isset( $_COOKIE['new_user'] ) && $_COOKIE[ 'new_user' ] == 0 ) {
 			return true;
+		} else {
+			return false;
+		}
+	}
+}
+
+// Check to see how many times/pages a user has visited the site
+if ( !function_exists( 'groundup_return_visit' ) ) {
+	function groundup_return_visit() {
+		if ( isset( $_COOKIE['new_user'] ) ) {
+			return intval( $_COOKIE['new_user'] );
+		} else {
+			return 0;
 		}
 	}
 }
