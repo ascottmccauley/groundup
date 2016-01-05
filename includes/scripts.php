@@ -22,6 +22,11 @@ if ( !function_exists( 'groundup_is_cached' ) ) {
 					$cached = false;
 				}	else {
 					$cached = true;
+					// add class to body
+					add_filter( 'body_class', function( $classes ) {
+						$classes[] = 'cached';
+						return $classes;
+					} );
 				}
 			}
 		}
@@ -126,7 +131,7 @@ if ( !function_exists( 'groundup_local_jquery_fallback' ) ) {
 	function groundup_local_jquery_fallback( $src, $handle = null ) {
 		static $add_jquery_fallback = false;
 	  if ( $add_jquery_fallback ) {
-	    echo '<script>window.jQuery || document.write(\'<script src="' . get_stylesheet_directory_uri() . '/assets/js/jquery.js" ><\/script>\')</script>' . "\n";
+	    echo '<script>window.jQuery || document.write(\'<script src="' . get_stylesheet_directory_uri() . '/assets/js/jquery.min.js" ><\/script>\')</script>' . "\n";
 	    $add_jquery_fallback = false;
 	  }
 	  if ( $handle === 'jquery' ) {
@@ -137,12 +142,16 @@ if ( !function_exists( 'groundup_local_jquery_fallback' ) ) {
 }
 
 // set all js scripts to defer loading until after render
-if ( !function_exists( 'groundup_defer_script' ) ) {
-	function groundup_defer_script( $tag, $handle ) {
-		if ( $handle != 'jquery' ) {
-			$tag = str_replace(' src', ' defer="defer" src', $tag );
+if ( !function_exists( 'groundup_defer_scripts' ) ) {
+	function groundup_defer_scripts( $url ) {
+		// If  not js file OR js file with 'jquery.ui.core.min.js' OR 'jquery.js' name string, then no need to apply defer
+		if( FALSE === strpos( $url, '.js' ) || ( ( strpos( $url, 'jquery.ui.core.min.js' ) > 0 ) || ( strpos( $url, 'jquery.js' ) > 0 ) ) ) {
+			return $url;
 		}
-		return $tag;
+		else {
+			//set defer for .js files
+			return "$url' defer='defer";
+		}
 	}
 }
-add_filter('script_loader_tag', 'groundup_defer_script', 10, 2);
+// add_filter( 'clean_url', 'groundup_defer_scripts', 11, 1 );
