@@ -7,8 +7,8 @@
 $sidebar = groundup_get_sidebar();
 if ( $sidebar ) { ?>
 	<aside class="sidebar" role="complementary">
-		<?php do_action( 'groundup_before_widgets' );
+		<?php do_action( 'groundup_before_widgets', $sidebar );
 		dynamic_sidebar( $sidebar );
-		do_action( 'groundup_after_widgets' ); ?>
+		do_action( 'groundup_after_widgets', $sidebar ); ?>
 	</aside>
 <?php } ?>
