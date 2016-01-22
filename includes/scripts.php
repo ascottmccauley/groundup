@@ -42,7 +42,7 @@ if ( !function_exists( 'groundup_enqueue_scripts' ) ) {
 
 		// Replace WP jquery with google CDN and include a local fallback
 		wp_deregister_script('jquery');
-		wp_register_script( 'jquery', '//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js', array(), '2.1.3', false );
+		wp_register_script( 'jquery', '//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js', array(), '2.1.4', false );
 
 		// enqueue main js
 		$main_js_file = get_stylesheet_directory() . '/assets/js/main.js';
